@@ -1,0 +1,32 @@
+{
+  "name": "typescript-graphql-template",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start:dev": "ts-node-dev --respawn --transpile-only src",
+    "lint": "eslint . --ext .ts",
+    "build": "rimraf ./build && npx tsc",
+    "start": "npm run build && node ./build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.6.3",
+    "class-validator": "^0.13.2",
+    "dotenv": "^16.0.0",
+    "graphql": "^15.8.0",
+    "mongoose": "^6.2.4",
+    "reflect-metadata": "^0.1.13",
+    "type-graphql": "^1.1.1",
+    "typedi": "^0.10.0",
+    "winston": "^3.7.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.30.5",
+    "@typescript-eslint/parser": "^5.30.5",
+    "eslint": "^8.13.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.6.2"
+  }
+}
