@@ -29,7 +29,7 @@ export default class LogHelper {
   ): void {
 
       const logData = {
-        requestId: context?.requestId,
+        requestId: context?.operationName,
         message: message,
         args,
       };

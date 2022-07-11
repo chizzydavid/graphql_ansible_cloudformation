@@ -4,19 +4,19 @@
 # -----------------------------------------------
 
 type Comment {
-  _id: ID!
+  _id: ID
   date: DateTime
-  email: String!
+  email: String
   movie_id: String
-  name: String!
-  text: String!
+  name: String
+  text: String
 }
 
 input CommentInput {
-  email: String!
-  movie_id: String!
-  name: String!
-  text: String!
+  email: String
+  movie_id: String
+  name: String
+  text: String
 }
 
 """
@@ -25,57 +25,57 @@ The javascript `Date` as string. Type represents date and time as the ISO Date s
 scalar DateTime
 
 type Imdb {
-  id: String!
+  id: String
   rating: Float
   votes: Int
 }
 
 input ImdbInput {
-  id: Int!
-  rating: Float!
-  votes: Int!
+  id: Int
+  rating: Float
+  votes: Int
 }
 
 type Movie {
-  _id: ID!
-  cast: [String!]!
+  _id: ID
+  cast: [String]
   comments: [Comment!]
-  countries: [String!]!
-  directors: [String!]!
-  fullplot: String!
-  genres: [String!]!
-  imdb: Imdb!
-  num_mflix_comments: Int!
-  plot: String!
+  countries: [String]
+  directors: [String]
+  fullplot: String
+  genres: [String]
+  imdb: Imdb
+  num_mflix_comments: Int
+  plot: String
   rated: String
-  released: String!
-  runtime: Int!
-  title: String!
-  type: String!
+  released: String
+  runtime: Int
+  title: String
+  type: String
 }
 
 input MovieInput {
-  cast: [String!]!
-  countries: [String!]!
-  directors: [String!]!
-  fullplot: String!
-  genres: [String!]!
-  imdb: ImdbInput!
-  num_mflix_comments: Int!
-  plot: String!
+  cast: [String]
+  countries: [String]
+  directors: [String]
+  fullplot: String
+  genres: [String]
+  imdb: ImdbInput
+  num_mflix_comments: Int
+  plot: String
   rated: String
-  released: String!
-  runtime: Int!
-  title: String!
-  type: String!
+  released: String
+  runtime: Int
+  title: String
+  type: String
 }
 
 type Mutation {
-  addComment(commentInput: CommentInput!): Comment!
-  addMovie(movieInput: MovieInput!): Movie!
+  addComment(commentInput: CommentInput): Comment
+  addMovie(movieInput: MovieInput): Movie
 }
 
 type Query {
-  getComments: [Comment!]!
-  getMovies: [Movie!]!
+  getComments: [Comment]
+  getMovies: [Movie]
 }

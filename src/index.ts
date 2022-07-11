@@ -22,6 +22,7 @@ async function bootstrap() {
   const schema = await buildSchema({
     resolvers,
     emitSchemaFile: true,
+    nullableByDefault: true,
     container: Container
   })
 

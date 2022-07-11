@@ -1,12 +1,12 @@
 import dotenv from "dotenv";
 
 dotenv.config();
-const { DB_URL } = process.env;
+const { DATABASE_URL } = process.env;
 
-const development = DB_URL;
-const staging = DB_URL;
-const production = DB_URL;
-const test = DB_URL;
-const qa = DB_URL
+const development = DATABASE_URL;
+const staging = DATABASE_URL;
+const production = DATABASE_URL;
+const test = DATABASE_URL;
+const qa = DATABASE_URL
 
 export default { development, production, test, staging, qa };

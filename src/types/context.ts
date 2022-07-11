@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 
-interface Context {
+interface IContext {
   req: Request;
   res: Response;
   requestId: string;
 }
 
-export default Context;
+export default IContext;

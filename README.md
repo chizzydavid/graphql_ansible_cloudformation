@@ -12,7 +12,6 @@
 * Jest
 * NodeJS
 * Typescript
-* MongoDB
 * TypeGraphQL
 * Mongoose
 * TypeDI (Dependency Injection Container)
@@ -22,7 +21,7 @@
 
 * Create a .env file at the root level of the project directory. Keys must match those in .env.template
 ```
-DB_URL=
+DATABASE_URL=
 ```
 * Install all the dependencies
 ```sh
