@@ -12,7 +12,6 @@ export default class CommentService {
 
   async getComments(): Promise<Comment[]> {
     const comments = await CommentModel.find().limit(2);
-    console.log(comments);
     return comments;
   }
 }
