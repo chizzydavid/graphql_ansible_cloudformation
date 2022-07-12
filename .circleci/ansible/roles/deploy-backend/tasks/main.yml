@@ -1,0 +1,30 @@
+---
+
+  - name: Create Application Directory
+    file:
+      path: /home/ubuntu/graphqlDemo
+      state: directory
+
+  - name: Git pull Source Code from Repo
+    shell: |
+      cd /home/ubuntu/graphqlDemo
+      git init
+      git pull "https://$GIT_USERNAME:$GIT_PASSWORD@github.com/$GIT_USERNAME/graphql-docker-cloudformation" master
+      echo DATABASE_URL=$DATABASE_URL >> ".env"
+
+
+  - name: Stop Application
+    become: true
+    command: pm2 stop graphqlDemo 
+    args: 
+      chdir: /home/ubuntu/graphqlDemo
+    ignore_errors: true
+
+  - name: Start Application
+    become: true
+    shell: |
+      npm install
+      pm2 start "npm run prod" --name graphqlDemo
+    args: 
+      chdir: /home/ubuntu/graphqlDemo
+

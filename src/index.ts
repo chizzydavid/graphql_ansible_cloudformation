@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import express from "express";
+import express, { Request, Response } from "express";
 import { buildSchema } from "type-graphql";
 import { ApolloServer } from "apollo-server-express";
 import { Container } from "typedi";
@@ -38,6 +38,7 @@ async function bootstrap() {
     ],    
   })
 
+  app.get('/api/test', (_: Request, res: Response) => res.status(200).send('Success'))
   await server.start();
   server.applyMiddleware({ app });
   
@@ -45,7 +46,6 @@ async function bootstrap() {
     console.log("App is listening on http://localhost:4000");
     connectToDatabase();
   }); 
- 
 }
 
 bootstrap();
