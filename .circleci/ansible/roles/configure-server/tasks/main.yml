@@ -1,0 +1,29 @@
+---
+  - name: "Update apt packages."
+    become: true
+    apt:
+      update_cache: yes
+
+  - name: "Upgrade packages"
+    become: true
+    apt:
+      upgrade: yes
+
+  - name: "Remove dependencies no longer needed"
+    become: true
+    apt:
+      autoremove: yes
+
+  - name: Install NodeJs Dependencies
+    become: true
+    shell: |
+        curl -sL https://deb.nodesource.com/setup_14.x | sudo -E bash - && sudo apt-get install -y nodejs
+        sudo apt-get install git
+
+  - name: Install pm2
+    become: true
+    npm: 
+      name: pm2 
+      global: yes 
+      production: yes
+

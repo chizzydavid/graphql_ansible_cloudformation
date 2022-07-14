@@ -30,7 +30,6 @@ jobs:
           name: Run Backend Test
           command: |
             npm run test
-
             
   scan:
     docker:
@@ -44,15 +43,87 @@ jobs:
           command: |
             npm audit fix --audit-level=critical
 
+  deploy-infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: yum install -y tar gzip
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --tags project=graphqlDemo \
+              --template-file .circleci/files/deploy-infrastructure.yml \
+              --stack-name graphqlDemo-backend-${CIRCLE_WORKFLOW_ID:0:7} \
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
+
+      - run:
+          name: Add back-end IP to ansible inventory
+          command: |
+            aws ec2 describe-instances --filters "Name=tag:Name,Values=*EC2-${CIRCLE_WORKFLOW_ID:0:7}*" --query 'Reservations[*].Instances[*].PublicIpAddress' --output text >> .circleci/ansible/inventory.txt
+            cat .circleci/ansible/inventory.txt
+
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - run: 
+          name: Install dependencies
+          command: |
+            apk add --update curl tar gzip ansible
+            pip install awscli
+      - add_ssh_keys:
+          fingerprints: [21:c8:e7:41:d8:6c:da:5e:17:32:cf:ca:39:ad:b4:e8]
+      - attach_workspace:
+          at: ~/             
+      - run:
+          name: Configure server
+          command: |
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/configure-server.yml -vvv --extra-vars='{"DATABASE_URL": "$DATABASE_URL", "GIT_USERNAME": "$GIT_USERNAME", "GIT_PASSWORD": "$GIT_PASSWORD"}'
+
+
+  deploy:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-build]
+      - attach_workspace:
+          at: ~/
+      - run: 
+          name: Install dependencies
+          command: |
+            apk add --update curl ansible
+            pip install awscli
+            
+      - add_ssh_keys:
+          fingerprints: [21:c8:e7:41:d8:6c:da:5e:17:32:cf:ca:39:ad:b4:e8]
+      - run:
+          name: Deploy backend
+          command: |
+            ansible-playbook -i .circleci/ansible/inventory.txt .circleci/ansible/deploy-backend.yml -vvv  --extra-vars='{"DATABASE_URL": "$DATABASE_URL", "GIT_USERNAME": "$GIT_USERNAME", "GIT_PASSWORD": "$GIT_PASSWORD"}'
 
 
 workflows:
-  default:
+  build_test_deploy:
     jobs:
       - build
       - test:
           requires: [build]
       - scan:
           requires: [build]
-
+      - deploy-infrastructure:
+          requires: [test, scan]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
+      - deploy:
+          requires: [configure-infrastructure]
 

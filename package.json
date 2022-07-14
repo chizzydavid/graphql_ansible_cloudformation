@@ -5,12 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --coverage",
-    "test:coverage": "jest --coverage --coverageReporters=\"text-summary\"",    
+    "test:coverage": "jest --coverage --coverageReporters=\"text-summary\"",
     "start:dev": "ts-node-dev --respawn --transpile-only src",
     "lint": "eslint . --ext  .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "build": "rimraf build && npx tsc",
-    "start": "node build/index.js",
+    "start": "node build/src/index.js",
     "prod": "npm run build && npm run start"
   },
   "author": "",
@@ -23,6 +23,7 @@
     "graphql": "^15.8.0",
     "mongoose": "^6.2.4",
     "reflect-metadata": "^0.1.13",
+    "rimraf": "^3.0.2",
     "type-graphql": "^1.1.1",
     "typedi": "^0.10.0",
     "winston": "^3.7.2"
